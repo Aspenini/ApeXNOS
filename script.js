@@ -18,6 +18,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+    
+    // Touch-friendly mobile menu improvements
+    if ('ontouchstart' in window) {
+        // Add touch feedback to navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            link.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Improve touch targets for player cards
+        document.querySelectorAll('.player-card').forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            
+            card.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    }
+    
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -384,6 +417,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         `;
         document.head.appendChild(reducedMotionStyle);
+    }
+    
+    // Mobile-specific optimizations
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        // Reduce matrix rain intensity on mobile
+        const matrixContainer = document.getElementById('matrix-rain');
+        if (matrixContainer) {
+            matrixContainer.style.opacity = '0.05';
+        }
+        
+        // Disable some heavy animations on mobile
+        const style = document.createElement('style');
+        style.textContent = `
+            .mobile-optimized .hologram-img {
+                animation: none !important;
+            }
+            .mobile-optimized .scan-lines {
+                animation: none !important;
+            }
+            .mobile-optimized .tech-item {
+                animation: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+        document.body.classList.add('mobile-optimized');
     }
     
     // Console easter egg

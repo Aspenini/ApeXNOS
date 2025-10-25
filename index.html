@@ -3,6 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#00d4ff">
+    <meta name="description" content="ApeXNOS - Pro Gaming Clan. A group of friends who happen to be really good at games.">
+    <meta name="keywords" content="gaming, clan, esports, apexnos, friends, gaming group">
+    <meta name="author" content="ApeXNOS Gaming Clan">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ApeXNOS">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <!-- Android Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    
     <title>ApeXNOS - Pro Gaming Clan</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="styles.css">
@@ -180,5 +197,63 @@
     </footer>
 
     <script src="script.js"></script>
-</body>
-</html>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        // Register service worker for offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ApeXNOS Service Worker: Registered successfully');
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New version available
+                                    console.log('ApeXNOS Service Worker: New version available');
+                                    if (confirm('A new version of ApeXNOS is available. Reload to update?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.log('ApeXNOS Service Worker: Registration failed', error);
+                    });
+            });
+        }
+        
+        // Add to home screen prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show custom install button or notification
+            console.log('ApeXNOS PWA: Install prompt available');
+        });
+        
+        // Handle install button click
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('ApeXNOS PWA: User accepted install');
+                    } else {
+                        console.log('ApeXNOS PWA: User dismissed install');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+        
+        // Listen for successful installation
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('ApeXNOS PWA: App was installed');
+        });
+    </script>

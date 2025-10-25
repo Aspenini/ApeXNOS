@@ -895,7 +895,7 @@ section {
     color: var(--text-gray);
 }
 
-/* Responsive Design */
+/* Enhanced Mobile Support */
 @media (max-width: 768px) {
     .hamburger {
         display: flex;
@@ -906,13 +906,14 @@ section {
         left: -100%;
         top: 70px;
         flex-direction: column;
-        background-color: rgba(10, 10, 10, 0.95);
+        background-color: rgba(10, 10, 10, 0.98);
         width: 100%;
         text-align: center;
         transition: 0.3s;
-        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-        backdrop-filter: blur(10px);
-        padding: 20px 0;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(15px);
+        padding: 30px 0;
+        border-top: 2px solid var(--primary-blue);
     }
     
     .nav-menu.active {
@@ -920,78 +921,236 @@ section {
     }
     
     .nav-menu li {
-        margin: 15px 0;
+        margin: 20px 0;
+    }
+    
+    .nav-link {
+        font-size: 18px;
+        padding: 10px 20px;
+        display: block;
+        width: 100%;
     }
     
     .hero-content {
         grid-template-columns: 1fr;
         text-align: center;
-        gap: 40px;
+        gap: 30px;
+        padding: 0 15px;
     }
     
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        line-height: 1.2;
     }
     
-    .hero-buttons {
-        justify-content: center;
-        flex-wrap: wrap;
+    .hero-subtitle {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+    
+    .hologram-container {
+        height: 250px;
+    }
+    
+    .hologram-logo {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .hologram-img {
+        width: 150px;
+        height: 150px;
     }
     
     .about-content {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 30px;
+        padding: 0 15px;
     }
     
     .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .roster-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .tournament-item {
-        grid-template-columns: 1fr;
-        text-align: center;
+        grid-template-columns: 1fr 1fr;
         gap: 20px;
     }
     
-    .contact-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
+    .stat-item {
+        padding: 20px;
     }
     
-    .social-links {
-        justify-content: center;
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .roster-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 0 15px;
+    }
+    
+    .player-card {
+        padding: 20px;
+    }
+    
+    .player-avatar {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .player-name {
+        font-size: 1.2rem;
     }
     
     .footer-content {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
         text-align: center;
+        padding: 0 15px;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 40px;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    section {
+        padding: 60px 0;
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 0 15px;
+        padding: 0 10px;
     }
     
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+    
+    .hero-description {
+        font-size: 0.9rem;
+    }
+    
+    .hologram-container {
+        height: 200px;
+    }
+    
+    .hologram-logo {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .hologram-img {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .roster-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .player-card {
+        padding: 15px;
+    }
+    
+    .player-avatar {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .player-name {
+        font-size: 1.1rem;
     }
     
     .section-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+    }
+    
+    .nav-container {
+        padding: 0 15px;
+    }
+    
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .logo-text {
+        font-size: 20px;
+    }
+    
+    section {
+        padding: 40px 0;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .nav-link {
+        padding: 15px 20px;
+        font-size: 18px;
+    }
+    
+    .player-card {
+        padding: 25px;
+    }
+    
+    .stat-item {
+        padding: 25px;
     }
     
     .btn-primary, .btn-secondary {
-        padding: 12px 20px;
-        font-size: 14px;
+        padding: 18px 35px;
+        font-size: 18px;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: 80vh;
     }
     
-    .recruitment-form {
-        padding: 20px;
+    .hero-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .hologram-container {
+        height: 200px;
+    }
+    
+    .hologram-logo {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .hologram-img {
+        width: 120px;
+        height: 120px;
+    }
+    
+    section {
+        padding: 40px 0;
     }
 }
