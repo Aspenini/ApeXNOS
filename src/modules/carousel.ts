@@ -1,6 +1,13 @@
 const AUTOPLAY_MS = 3800;
 const SWIPE_THRESHOLD = 40;
-const VISIBLE_RANGE = 2;
+const NARROW_MQ = "(max-width: 640px)";
+
+type LayoutMetrics = {
+  visibleRange: number;
+  xStep: number;
+  zStep: number;
+  rotateStep: number;
+};
 
 type CarouselElements = {
   root: HTMLElement;
@@ -14,6 +21,29 @@ type CarouselElements = {
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function isNarrowViewport(): boolean {
+  return window.matchMedia(NARROW_MQ).matches;
+}
+
+function getLayoutMetrics(): LayoutMetrics {
+  // Desktop: deep 3D fan. Mobile: tighter steps so cards stay on-screen.
+  if (isNarrowViewport()) {
+    return {
+      visibleRange: 1,
+      xStep: 42,
+      zStep: 70,
+      rotateStep: -12,
+    };
+  }
+
+  return {
+    visibleRange: 2,
+    xStep: 58,
+    zStep: 90,
+    rotateStep: -18,
+  };
 }
 
 function wrapIndex(index: number, length: number): number {
@@ -64,9 +94,10 @@ function layoutSlide(
   slide: HTMLElement,
   offset: number,
   isActive: boolean,
+  metrics: LayoutMetrics,
 ): void {
   const abs = Math.abs(offset);
-  const visible = abs <= VISIBLE_RANGE;
+  const visible = abs <= metrics.visibleRange;
 
   slide.classList.toggle("is-active", isActive);
   slide.classList.toggle("is-visible", visible);
@@ -80,12 +111,12 @@ function layoutSlide(
     return;
   }
 
-  const x = offset * 58;
-  const z = -Math.abs(offset) * 90;
-  const rotateY = offset * -18;
-  const scale = isActive ? 1 : Math.max(0.72, 1 - abs * 0.14);
-  const y = abs * 6;
-  const opacity = isActive ? 1 : Math.max(0.35, 1 - abs * 0.28);
+  const x = offset * metrics.xStep;
+  const z = -Math.abs(offset) * metrics.zStep;
+  const rotateY = offset * metrics.rotateStep;
+  const scale = isActive ? 1 : Math.max(0.78, 1 - abs * 0.12);
+  const y = abs * (isNarrowViewport() ? 4 : 6);
+  const opacity = isActive ? 1 : Math.max(0.4, 1 - abs * 0.28);
 
   slide.style.transform = `translate(calc(-50% + ${x}%), calc(-50% + ${y}px)) translateZ(${z}px) rotateY(${rotateY}deg) scale(${scale})`;
   slide.style.opacity = String(opacity);
@@ -102,6 +133,7 @@ export function initCarousel(root: HTMLElement): () => void {
   let startX = 0;
   let dragX = 0;
   let isDragging = false;
+  let didDrag = false;
 
   const goTo = (next: number, announce = true): void => {
     index = wrapIndex(next, els.slides.length);
@@ -110,12 +142,14 @@ export function initCarousel(root: HTMLElement): () => void {
   };
 
   const render = (announce = false): void => {
+    const metrics = getLayoutMetrics();
+
     els.slides.forEach((slide, i) => {
       let offset = i - index;
       const half = Math.floor(els.slides.length / 2);
       if (offset > half) offset -= els.slides.length;
       if (offset < -half) offset += els.slides.length;
-      layoutSlide(slide, offset, i === index);
+      layoutSlide(slide, offset, i === index, metrics);
     });
 
     dots.forEach((dot, i) => {
@@ -132,6 +166,10 @@ export function initCarousel(root: HTMLElement): () => void {
   };
 
   const dots = createDots(els, (i) => goTo(i));
+  const narrowMq = window.matchMedia(NARROW_MQ);
+  const onViewportChange = (): void => {
+    render(false);
+  };
 
   const next = (): void => goTo(index + 1);
   const prev = (): void => goTo(index - 1);
@@ -174,6 +212,7 @@ export function initCarousel(root: HTMLElement): () => void {
     pointerId = event.pointerId;
     startX = event.clientX;
     dragX = 0;
+    didDrag = false;
     isDragging = true;
     els.root.classList.add("is-dragging");
     els.stage.setPointerCapture(event.pointerId);
@@ -183,6 +222,7 @@ export function initCarousel(root: HTMLElement): () => void {
   const onPointerMove = (event: PointerEvent): void => {
     if (!isDragging || event.pointerId !== pointerId) return;
     dragX = event.clientX - startX;
+    if (Math.abs(dragX) > 8) didDrag = true;
   };
 
   const onPointerUp = (event: PointerEvent): void => {
@@ -220,10 +260,17 @@ export function initCarousel(root: HTMLElement): () => void {
     if (!els.root.contains(e.relatedTarget as Node | null)) startAutoplay();
   });
   document.addEventListener("visibilitychange", onVisibility);
+  if (typeof narrowMq.addEventListener === "function") {
+    narrowMq.addEventListener("change", onViewportChange);
+  } else {
+    // Safari < 14
+    narrowMq.addListener(onViewportChange);
+  }
 
   // Click side cards to jump
   els.slides.forEach((slide, i) => {
     slide.addEventListener("click", () => {
+      if (didDrag) return;
       if (i !== index) goTo(i);
     });
   });
@@ -241,6 +288,11 @@ export function initCarousel(root: HTMLElement): () => void {
     els.stage.removeEventListener("pointerup", onPointerUp);
     els.stage.removeEventListener("pointercancel", onPointerUp);
     document.removeEventListener("visibilitychange", onVisibility);
+    if (typeof narrowMq.removeEventListener === "function") {
+      narrowMq.removeEventListener("change", onViewportChange);
+    } else {
+      narrowMq.removeListener(onViewportChange);
+    }
   };
 }
 
