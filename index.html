@@ -3,13 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#050505" />
+
+    <title>ApeXNOS — Gaming Clan</title>
     <meta
       name="description"
-      content="ApeXNOS — a group of friends who happen to be really good at games."
+      content="ApeXNOS — a group of friends who happen to be really good at games. Meet the squad."
     />
     <meta name="author" content="ApeXNOS Gaming Clan" />
+    <link rel="canonical" href="https://apexnos.aspenini.com/" />
 
+    <meta property="og:site_name" content="ApeXNOS" />
     <meta property="og:title" content="ApeXNOS — Gaming Clan" />
     <meta
       property="og:description"
@@ -17,63 +22,100 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://apexnos.aspenini.com/" />
-    <meta property="og:image" content="https://apexnos.aspenini.com/logo-512.png" />
+    <meta property="og:image" content="https://apexnos.aspenini.com/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The ApeXNOS logo on a dark teal backdrop." />
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="ApeXNOS — Gaming Clan" />
     <meta
       name="twitter:description"
       content="A group of friends who happen to be really good at games."
     />
+    <meta name="twitter:image" content="https://apexnos.aspenini.com/og.jpg" />
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="ApeXNOS" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <title>ApeXNOS — Gaming Clan</title>
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/logo-192.png" />
+
+    <!-- The hero mark is the LCP element; start it before the CSS resolves.
+         srcset/sizes must mirror the <picture> below exactly, or the browser
+         preloads one candidate and then downloads a different one. -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      imagesrcset="/logo-128.avif 128w, /logo-256.avif 256w"
+      imagesizes="120px"
+      fetchpriority="high"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ApeXNOS",
+        "alternateName": "ApeXNOS Gaming Clan",
+        "url": "https://apexnos.aspenini.com/",
+        "logo": "https://apexnos.aspenini.com/logo-512.png",
+        "description": "A group of friends who happen to be really good at games."
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <div class="bg" aria-hidden="true">
-      <div class="bg-glow"></div>
-      <div class="bg-glow bg-glow--secondary"></div>
-      <div class="bg-grid"></div>
-      <div class="bg-scanlines"></div>
-      <div class="bg-particles" id="particles"></div>
+    <div class="backdrop" aria-hidden="true">
+      <div class="backdrop-aurora"></div>
+      <div class="backdrop-aurora backdrop-aurora--alt"></div>
+      <div class="backdrop-grid"></div>
+      <canvas class="backdrop-field" id="field"></canvas>
+      <div class="backdrop-spotlight" id="spotlight"></div>
+      <div class="backdrop-vignette"></div>
+      <div class="backdrop-noise"></div>
     </div>
 
     <main id="main">
-      <section id="home" class="hero">
+      <section id="home" class="hero" data-reveal>
         <div class="hero-mark">
-          <div class="hero-ring" aria-hidden="true"></div>
-          <div class="hero-ring hero-ring--delay" aria-hidden="true"></div>
-          <img
-            src="/logo.png"
-            alt="ApeXNOS logo"
-            class="hero-logo"
-            width="96"
-            height="96"
-          />
+          <span class="hero-ring" aria-hidden="true"></span>
+          <span class="hero-ring hero-ring--delay" aria-hidden="true"></span>
+          <picture>
+            <source type="image/avif" srcset="/logo-128.avif 128w, /logo-256.avif 256w" sizes="120px" />
+            <source type="image/webp" srcset="/logo-128.webp 128w, /logo-256.webp 256w" sizes="120px" />
+            <img
+              src="/logo-256.webp"
+              alt="ApeXNOS logo"
+              class="hero-logo"
+              width="256"
+              height="256"
+              fetchpriority="high"
+            />
+          </picture>
         </div>
+
         <p class="eyebrow">
           <span class="eyebrow-pulse" aria-hidden="true"></span>
           Gaming clan
         </p>
+
         <h1 class="hero-title">
-          <span class="hero-title-text">ApeXNOS</span>
+          <span class="hero-title-text" data-scramble>ApeXNOS</span>
         </h1>
+
         <p class="lead">
-          A group of friends who happen to be really good at games.
-          We're not pros — but we play like we are.
+          A group of friends who happen to be really good at games. We're not pros — but we play
+          like we are.
         </p>
       </section>
 
-      <section id="roster" class="section">
+      <section id="roster" class="section" data-reveal>
         <div class="section-head">
           <p class="eyebrow">Roster</p>
           <h2>The squad</h2>
@@ -81,9 +123,9 @@
         </div>
 
         <div
-          class="squad-carousel"
+          class="carousel"
           data-carousel
-          role="region"
+          role="group"
           aria-roledescription="carousel"
           aria-label="Squad members"
         >
@@ -93,107 +135,14 @@
             data-carousel-prev
             aria-label="Previous member"
           >
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"
-              />
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
             </svg>
           </button>
 
           <div class="carousel-stage" data-carousel-stage>
             <ul class="carousel-track" data-carousel-track>
-              <li class="squad-card" data-carousel-slide data-name="Aspenini">
-                <div class="squad-card-shine" aria-hidden="true"></div>
-                <div class="squad-avatar" aria-hidden="true">
-                  <span>A</span>
-                </div>
-                <div class="squad-meta">
-                  <span class="squad-name">Aspenini</span>
-                  <span class="squad-role">Squad</span>
-                </div>
-                <div class="squad-stat" aria-hidden="true">
-                  <span class="squad-stat-bar"></span>
-                </div>
-              </li>
-              <li class="squad-card" data-carousel-slide data-name="NomadTax">
-                <div class="squad-card-shine" aria-hidden="true"></div>
-                <div class="squad-avatar" aria-hidden="true">
-                  <span>N</span>
-                </div>
-                <div class="squad-meta">
-                  <span class="squad-name">NomadTax</span>
-                  <span class="squad-role">Squad</span>
-                </div>
-                <div class="squad-stat" aria-hidden="true">
-                  <span class="squad-stat-bar"></span>
-                </div>
-              </li>
-              <li class="squad-card" data-carousel-slide data-name="Heaths">
-                <div class="squad-card-shine" aria-hidden="true"></div>
-                <div class="squad-avatar" aria-hidden="true">
-                  <span>H</span>
-                </div>
-                <div class="squad-meta">
-                  <span class="squad-name">Heaths</span>
-                  <span class="squad-role">Squad</span>
-                </div>
-                <div class="squad-stat" aria-hidden="true">
-                  <span class="squad-stat-bar"></span>
-                </div>
-              </li>
-              <li class="squad-card" data-carousel-slide data-name="KINGFELTNER">
-                <div class="squad-card-shine" aria-hidden="true"></div>
-                <div class="squad-avatar" aria-hidden="true">
-                  <span>K</span>
-                </div>
-                <div class="squad-meta">
-                  <span class="squad-name">KINGFELTNER</span>
-                  <span class="squad-role">Squad</span>
-                </div>
-                <div class="squad-stat" aria-hidden="true">
-                  <span class="squad-stat-bar"></span>
-                </div>
-              </li>
-              <li class="squad-card" data-carousel-slide data-name="MrGamer3811">
-                <div class="squad-card-shine" aria-hidden="true"></div>
-                <div class="squad-avatar" aria-hidden="true">
-                  <span>M</span>
-                </div>
-                <div class="squad-meta">
-                  <span class="squad-name">MrGamer3811</span>
-                  <span class="squad-role">Squad</span>
-                </div>
-                <div class="squad-stat" aria-hidden="true">
-                  <span class="squad-stat-bar"></span>
-                </div>
-              </li>
-              <li class="squad-card" data-carousel-slide data-name="AbbieRocks">
-                <div class="squad-card-shine" aria-hidden="true"></div>
-                <div class="squad-avatar" aria-hidden="true">
-                  <span>A</span>
-                </div>
-                <div class="squad-meta">
-                  <span class="squad-name">AbbieRocks</span>
-                  <span class="squad-role">Squad</span>
-                </div>
-                <div class="squad-stat" aria-hidden="true">
-                  <span class="squad-stat-bar"></span>
-                </div>
-              </li>
-              <li class="squad-card" data-carousel-slide data-name="Ripley">
-                <div class="squad-card-shine" aria-hidden="true"></div>
-                <div class="squad-avatar" aria-hidden="true">
-                  <span>R</span>
-                </div>
-                <div class="squad-meta">
-                  <span class="squad-name">Ripley</span>
-                  <span class="squad-role">Squad</span>
-                </div>
-                <div class="squad-stat" aria-hidden="true">
-                  <span class="squad-stat-bar"></span>
-                </div>
-              </li>
+              <!--@roster-->
             </ul>
           </div>
 
@@ -203,21 +152,13 @@
             data-carousel-next
             aria-label="Next member"
           >
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <path
-                fill="currentColor"
-                d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
-              />
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
             </svg>
           </button>
 
           <div class="carousel-footer">
-            <div
-              class="carousel-dots"
-              data-carousel-dots
-              role="tablist"
-              aria-label="Select squad member"
-            ></div>
+            <div class="carousel-dots" data-carousel-dots></div>
             <p class="carousel-live" data-carousel-live aria-live="polite" aria-atomic="true"></p>
           </div>
         </div>
@@ -226,7 +167,7 @@
 
     <footer class="site-footer">
       <span class="footer-brand">ApeXNOS</span>
-      <span class="footer-copy">&copy; <span id="year">2026</span></span>
+      <span class="footer-copy">&copy; <span data-year>2026</span></span>
     </footer>
 
     <div id="pwa-toast" class="pwa-toast" hidden role="status" aria-live="polite">
